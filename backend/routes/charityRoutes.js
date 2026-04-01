@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
           featured: true, 
           totalRaised: 42500, 
           websiteUrl: 'https://example.com/wildlife',
-          logoUrl: 'http://localhost:5000/uploads/charities/wildlife_logo.png'
+          logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/wildlife_logo.png`
         },
         { 
           _id: '2', 
@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
           featured: true, 
           totalRaised: 89000, 
           websiteUrl: 'https://example.com/edu',
-          logoUrl: 'http://localhost:5000/uploads/charities/education_logo.png'
+          logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/education_logo.png`
         },
         { 
           _id: '3', 
@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
           featured: true, 
           totalRaised: 52000, 
           websiteUrl: 'https://example.com/oceans',
-          logoUrl: 'http://localhost:5000/uploads/charities/oceans_logo.png'
+          logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/oceans_logo.png`
         },
         { 
           _id: '4', 
@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
           featured: true, 
           totalRaised: 18000, 
           websiteUrl: 'https://example.com/junior-golf',
-          logoUrl: 'http://localhost:5000/uploads/charities/golf_foundation_logo.png'
+          logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/golf_foundation_logo.png`
         }
       ]);
     }
