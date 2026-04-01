@@ -1,0 +1,14 @@
+{
+  "name": "golf_platform",
+  "version": "1.0.0",
+  "description": "Golf platform root configuration to easily boot both React frontend and Node backend.",
+  "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && node index.js",
+    "start:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
