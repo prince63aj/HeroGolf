@@ -48,6 +48,12 @@ router.get('/', async (req, res) => {
         const exists = await Charity.findOne({ name: data.name });
         if (!exists) {
           await Charity.create(data);
+        } else if (exists.description === 'Charity organization' || !exists.logoUrl) {
+          // Heal the placeholder charity created during the early registration bug
+          exists.description = data.description;
+          exists.logoUrl = data.logoUrl;
+          exists.totalRaised = data.totalRaised;
+          await exists.save();
         }
       }
       
