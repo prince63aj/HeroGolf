@@ -6,9 +6,11 @@ router.get('/', async (req, res) => {
   try {
     const charities = await Charity.find({ isActive: true });
     
-    // If the database is completely empty (no admin initialized models yet), return beautiful default mock data 
-    // to strictly fulfill Step 6 PRD requirement for showcasing the system immediately.
-    if (charities.length < 4) {
+    // Ensure the 4 primary charities exist and are fully populated.
+    // If any are missing or if the placeholder requires healing, run the seeder.
+    const needsHealing = charities.length < 4 || charities.some(c => c.description === 'Charity organization' || !c.logoUrl);
+    
+    if (needsHealing) {
       const defaultCharities = [
         { 
           name: 'Wildlife Conservation Trust', 
