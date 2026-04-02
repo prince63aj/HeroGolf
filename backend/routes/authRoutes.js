@@ -19,6 +19,12 @@ router.post('/register', async (req, res) => {
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: 'User already exists' });
     
+    const Charity = require('../models/Charity');
+    let charity = await Charity.findOne({ name: charityName || 'Wildlife Conservation Trust' });
+    if (!charity) {
+      charity = await Charity.create({ name: charityName || 'Wildlife Conservation Trust', description: 'Charity organization' });
+    }
+
     // In actual implementation, we'd wait for Stripe checkout to set role='subscriber'
     const user = await User.create({ 
       name, 
@@ -27,8 +33,8 @@ router.post('/register', async (req, res) => {
       role: 'subscriber', // Fast-tracking for PRD demo
       drawNumbers: [1, 2, 3, 4, 5], // Default assigned numbers
       charityConfig: { 
-        charityId: charityName || 'Wildlife Conservation Trust', 
-        rate: Number(charityRate) || 10 
+        charityId: charity._id, 
+        contributionPercent: Number(charityRate) || 10 
       }
     });
     
