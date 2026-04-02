@@ -8,10 +8,9 @@ router.get('/', async (req, res) => {
     
     // If the database is completely empty (no admin initialized models yet), return beautiful default mock data 
     // to strictly fulfill Step 6 PRD requirement for showcasing the system immediately.
-    if (charities.length === 0) {
-      return res.json([
+    if (charities.length < 4) {
+      const defaultCharities = [
         { 
-          _id: '1', 
           name: 'Wildlife Conservation Trust', 
           description: 'Protecting global wildlife habitats and endangered species from extinction through targeted fieldwork and advocacy.', 
           featured: true, 
@@ -20,7 +19,6 @@ router.get('/', async (req, res) => {
           logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/wildlife_logo.png`
         },
         { 
-          _id: '2', 
           name: 'Global Education Fund', 
           description: 'Providing technological resources and infrastructure to underprivileged schools across emerging continents.', 
           featured: true, 
@@ -29,7 +27,6 @@ router.get('/', async (req, res) => {
           logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/education_logo.png`
         },
         { 
-          _id: '3', 
           name: 'Clean Oceans Initiative', 
           description: 'Removing plastic waste from marine environments across the globe and restoring coastal coral reefs.', 
           featured: true, 
@@ -38,7 +35,6 @@ router.get('/', async (req, res) => {
           logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/oceans_logo.png`
         },
         { 
-          _id: '4', 
           name: 'Junior Golf Foundation', 
           description: 'Sponsoring young athletes from low-income communities to learn the sport, discipline, and networking skills of golf.', 
           featured: true, 
@@ -46,7 +42,18 @@ router.get('/', async (req, res) => {
           websiteUrl: 'https://example.com/junior-golf',
           logoUrl: `${req.protocol}://${req.get('host')}/uploads/charities/golf_foundation_logo.png`
         }
-      ]);
+      ];
+
+      for (const data of defaultCharities) {
+        const exists = await Charity.findOne({ name: data.name });
+        if (!exists) {
+          await Charity.create(data);
+        }
+      }
+      
+      // Re-fetch now that they are seeded
+      const updatedCharities = await Charity.find({ isActive: true });
+      return res.json(updatedCharities);
     }
 
     res.json(charities);
